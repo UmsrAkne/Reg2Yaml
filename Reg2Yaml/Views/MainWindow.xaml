@@ -46,7 +46,11 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type texts:TextProcessorContainer}">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding DisplayName}" />
+                            <CheckBox
+                                Margin="0,0,5,0"
+                                VerticalAlignment="Center"
+                                IsChecked="{Binding IsEnabled}" />
+                            <TextBlock VerticalAlignment="Center" Text="{Binding DisplayName}" />
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -68,7 +72,11 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type texts:TextProcessor}">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Caption}" />
+                            <CheckBox
+                                Margin="0,0,5,0"
+                                VerticalAlignment="Center"
+                                IsChecked="{Binding IsEnabled}" />
+                            <TextBlock VerticalAlignment="Center" Text="{Binding Caption}" />
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -90,8 +98,15 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type texts:TextProcessingUnit}">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding ProcessingType}" />
-                            <TextBlock Text="{Binding RegexPattern}" />
+                            <CheckBox
+                                Margin="0,0,5,0"
+                                VerticalAlignment="Center"
+                                IsChecked="{Binding IsEnabled}" />
+                            <TextBlock
+                                Margin="0,0,5,0"
+                                VerticalAlignment="Center"
+                                Text="{Binding ProcessingType}" />
+                            <TextBlock VerticalAlignment="Center" Text="{Binding RegexPattern}" />
                         </StackPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

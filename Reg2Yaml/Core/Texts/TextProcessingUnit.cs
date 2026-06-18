@@ -6,6 +6,7 @@ namespace Reg2Yaml.Core.Texts
     {
         private string regexPattern = string.Empty;
         private TextProcessingType processingType;
+        private bool isEnabled = true;
 
         public TextProcessingType ProcessingType
         {
@@ -14,5 +15,11 @@ namespace Reg2Yaml.Core.Texts
         }
 
         public string RegexPattern { get => regexPattern; set => SetProperty(ref regexPattern, value); }
+
+        public bool IsEnabled
+        {
+            get => isEnabled;
+            set => SetProperty(ref isEnabled, value);
+        }
     }
 }
