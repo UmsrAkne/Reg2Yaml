@@ -18,6 +18,7 @@
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -124,7 +125,12 @@
                     Foreground="#555555"
                     Text="Input Text" />
             </Border>
-            <TextBox Background="LightCyan" FontSize="{StaticResource CommonFontSize}" />
+            <TextBox
+                AcceptsReturn="True"
+                AcceptsTab="True"
+                Background="LightCyan"
+                FontSize="{StaticResource CommonFontSize}"
+                Text="{Binding InputText}" />
         </DockPanel>
 
         <DockPanel Grid.Row="1" Grid.Column="2">
@@ -138,7 +144,22 @@
                     Foreground="#555555"
                     Text="Result" />
             </Border>
-            <TextBlock Background="LightSteelBlue" FontSize="{StaticResource CommonFontSize}" />
+            <TextBlock
+                Background="LightSteelBlue"
+                FontSize="{StaticResource CommonFontSize}"
+                Text="{Binding ResultText}" />
         </DockPanel>
+
+        <Border
+            Grid.Row="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="3">
+
+            <Button
+                Margin="3"
+                Padding="3"
+                Command="{Binding ExecuteTextProcessCommand}"
+                Content="Start Text Process" />
+        </Border>
     </Grid>
 </Window>

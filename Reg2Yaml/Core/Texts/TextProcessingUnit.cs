@@ -7,6 +7,7 @@ namespace Reg2Yaml.Core.Texts
         private string regexPattern = string.Empty;
         private TextProcessingType processingType;
         private bool isEnabled = true;
+        private string replacement = string.Empty;
 
         public TextProcessingType ProcessingType
         {
@@ -15,6 +16,8 @@ namespace Reg2Yaml.Core.Texts
         }
 
         public string RegexPattern { get => regexPattern; set => SetProperty(ref regexPattern, value); }
+
+        public string Replacement { get => replacement; set => SetProperty(ref replacement, value); }
 
         public bool IsEnabled
         {

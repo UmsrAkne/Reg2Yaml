@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using Prism.Commands;
 using Prism.Mvvm;
+using Reg2Yaml.Core.Services;
 using Reg2Yaml.Core.Texts;
 using Reg2Yaml.Utils;
 
@@ -20,8 +21,11 @@ public class MainWindowViewModel : BindableBase
     #endif
 
     private readonly AppVersionInfo appVersionInfo = new();
+    private readonly TextProcessingService textProcessingService = new ();
     private TextProcessorContainer selectedContainer;
     private TextProcessor selectedProcessor;
+    private string inputText;
+    private string resultText;
 
     public MainWindowViewModel()
     {
@@ -31,6 +35,20 @@ public class MainWindowViewModel : BindableBase
     public string Title => appVersionInfo.Title;
 
     public ObservableCollection<TextProcessorContainer> TextProcessorContainers { get; set; } = new();
+
+    public string InputText
+    {
+        get => inputText;
+        set
+        {
+            if (SetProperty(ref inputText, value))
+            {
+                RaisePropertyChanged(nameof(ExecuteTextProcessCommand));
+            }
+        }
+    }
+
+    public string ResultText { get => resultText; set => SetProperty(ref resultText, value); }
 
     public TextProcessorContainer SelectedContainer
     {
@@ -57,6 +75,16 @@ public class MainWindowViewModel : BindableBase
     public DelegateCommand AddUnitCommand => new DelegateCommand(() =>
     {
         SelectedProcessor?.Units.Add(new TextProcessingUnit());
+    });
+
+    public DelegateCommand ExecuteTextProcessCommand => new DelegateCommand(() =>
+    {
+        if (SelectedContainer == null)
+        {
+            return;
+        }
+
+        ResultText = textProcessingService.ExecuteAndExportToYaml(SelectedContainer, InputText);
     });
 
     [Conditional("DEBUG")]
