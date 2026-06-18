@@ -54,6 +54,11 @@ public class MainWindowViewModel : BindableBase
         SelectedContainer?.TextProcessors.Add(new TextProcessor() { Caption = "caption", });
     });
 
+    public DelegateCommand AddUnitCommand => new DelegateCommand(() =>
+    {
+        SelectedProcessor?.Units.Add(new TextProcessingUnit());
+    });
+
     [Conditional("DEBUG")]
     private void SetupDummyData()
     {

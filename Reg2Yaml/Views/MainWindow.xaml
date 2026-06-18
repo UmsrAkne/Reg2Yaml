@@ -75,20 +75,28 @@
             </ListBox>
         </DockPanel>
 
-        <ItemsControl
-            Grid.Row="0"
-            Grid.Column="2"
-            Background="LightGray"
-            ItemsSource="{Binding SelectedProcessor.Units}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate DataType="{x:Type texts:TextProcessingUnit}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding ProcessingType}" />
-                        <TextBlock Text="{Binding RegexPattern}" />
-                    </StackPanel>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <DockPanel Grid.Row="0" Grid.Column="2">
+            <Button
+                Margin="3"
+                Padding="3"
+                Command="{Binding AddUnitCommand}"
+                Content="Add Unit"
+                DockPanel.Dock="Bottom" />
+
+            <ItemsControl
+                Background="LightGray"
+                DockPanel.Dock="Top"
+                ItemsSource="{Binding SelectedProcessor.Units}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type texts:TextProcessingUnit}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding ProcessingType}" />
+                            <TextBlock Text="{Binding RegexPattern}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </DockPanel>
 
         <DockPanel Grid.Row="1" Grid.Column="1">
             <Border
