@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using Prism.Commands;
 using Prism.Mvvm;
 using Reg2Yaml.Core.Texts;
 using Reg2Yaml.Utils;
@@ -42,6 +43,16 @@ public class MainWindowViewModel : BindableBase
         get => selectedProcessor;
         set => SetProperty(ref selectedProcessor, value);
     }
+
+    public DelegateCommand AddContainerCommand => new DelegateCommand(() =>
+    {
+        TextProcessorContainers.Add(new TextProcessorContainer() { DisplayName = "new container", });
+    });
+
+    public DelegateCommand AddProcessorCommand => new DelegateCommand(() =>
+    {
+        SelectedContainer?.TextProcessors.Add(new TextProcessor() { Caption = "caption", });
+    });
 
     [Conditional("DEBUG")]
     private void SetupDummyData()

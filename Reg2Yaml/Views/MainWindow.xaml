@@ -26,37 +26,54 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <ListBox
+        <DockPanel
             Grid.Row="0"
             Grid.RowSpan="2"
-            Grid.Column="0"
-            Width="300"
-            Background="LightGoldenrodYellow"
-            ItemsSource="{Binding TextProcessorContainers}"
-            SelectedItem="{Binding SelectedContainer}">
-            <ListBox.ItemTemplate>
-                <DataTemplate DataType="{x:Type texts:TextProcessorContainer}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding DisplayName}" />
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+            Grid.Column="0">
+            <Button
+                Margin="3"
+                Padding="3"
+                Command="{Binding AddContainerCommand}"
+                Content="Add Container"
+                DockPanel.Dock="Bottom" />
 
-        <ListBox
-            Grid.Row="0"
-            Grid.Column="1"
-            Background="LightGreen"
-            ItemsSource="{Binding SelectedContainer.TextProcessors}"
-            SelectedItem="{Binding SelectedProcessor}">
-            <ListBox.ItemTemplate>
-                <DataTemplate DataType="{x:Type texts:TextProcessor}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Caption}" />
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+            <ListBox
+                Width="300"
+                Background="LightGoldenrodYellow"
+                DockPanel.Dock="Top"
+                ItemsSource="{Binding TextProcessorContainers}"
+                SelectedItem="{Binding SelectedContainer}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type texts:TextProcessorContainer}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding DisplayName}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </DockPanel>
+
+        <DockPanel Grid.Row="0" Grid.Column="1">
+            <Button
+                Margin="3"
+                Padding="3"
+                Command="{Binding AddProcessorCommand}"
+                Content="Add Processor"
+                DockPanel.Dock="Bottom" />
+            <ListBox
+                Background="LightGreen"
+                DockPanel.Dock="Top"
+                ItemsSource="{Binding SelectedContainer.TextProcessors}"
+                SelectedItem="{Binding SelectedProcessor}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type texts:TextProcessor}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Caption}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </DockPanel>
 
         <ItemsControl
             Grid.Row="0"
@@ -73,16 +90,32 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <TextBox
-            Grid.Row="1"
-            Grid.Column="1"
-            Background="LightCyan"
-            FontSize="{StaticResource CommonFontSize}" />
+        <DockPanel Grid.Row="1" Grid.Column="1">
+            <Border
+                Padding="3,10,3,5"
+                Background="LightCyan"
+                DockPanel.Dock="Top">
+                <TextBlock
+                    DockPanel.Dock="Top"
+                    FontWeight="SemiBold"
+                    Foreground="#555555"
+                    Text="Input Text" />
+            </Border>
+            <TextBox Background="LightCyan" FontSize="{StaticResource CommonFontSize}" />
+        </DockPanel>
 
-        <TextBlock
-            Grid.Row="1"
-            Grid.Column="2"
-            Background="LightSteelBlue"
-            FontSize="{StaticResource CommonFontSize}" />
+        <DockPanel Grid.Row="1" Grid.Column="2">
+            <Border
+                Padding="3,10,3,5"
+                Background="LightSteelBlue"
+                DockPanel.Dock="Top">
+                <TextBlock
+                    DockPanel.Dock="Top"
+                    FontWeight="SemiBold"
+                    Foreground="#555555"
+                    Text="Result" />
+            </Border>
+            <TextBlock Background="LightSteelBlue" FontSize="{StaticResource CommonFontSize}" />
+        </DockPanel>
     </Grid>
 </Window>
