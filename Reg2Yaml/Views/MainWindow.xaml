@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:texts="clr-namespace:Reg2Yaml.Core.Texts"
     xmlns:viewModels="clr-namespace:Reg2Yaml.ViewModels"
     Title="{Binding Title}"
@@ -14,6 +15,22 @@
     d:DesignHeight="480"
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
+    <Window.Resources>
+        <ObjectDataProvider
+            x:Key="ProcessingTypeEnumValues"
+            MethodName="GetValues"
+            ObjectType="{x:Type system:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="texts:TextProcessingType" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding
+            Key="S"
+            Command="{Binding SaveJsonCommand}"
+            Modifiers="Control" />
+    </Window.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
@@ -135,25 +152,29 @@
                                 Margin="0,0,5,0"
                                 VerticalAlignment="Center"
                                 IsChecked="{Binding IsEnabled}" />
-                            <TextBlock
+                            <ComboBox
+                                Width="80"
                                 Margin="0,0,5,0"
                                 VerticalAlignment="Center"
-                                Text="{Binding ProcessingType}" />
+                                ItemsSource="{Binding Source={StaticResource ProcessingTypeEnumValues}}"
+                                SelectedItem="{Binding ProcessingType}" />
                             <TextBox
-                                x:Name="NormalText"
+                                x:Name="RegexPatternBox"
+                                Width="200"
+                                Margin="0,0,5,0"
                                 VerticalAlignment="Center"
                                 Text="{Binding RegexPattern, UpdateSourceTrigger=PropertyChanged}" />
-                            <TextBlock
-                                x:Name="EditableText"
+                            <TextBox
+                                x:Name="ReplacementBox"
+                                Width="200"
                                 VerticalAlignment="Center"
-                                Text="{Binding RegexPattern, UpdateSourceTrigger=PropertyChanged}"
+                                Text="{Binding Replacement, UpdateSourceTrigger=PropertyChanged}"
                                 Visibility="Collapsed" />
                         </DockPanel>
 
                         <DataTemplate.Triggers>
-                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
-                                <Setter TargetName="NormalText" Property="Visibility" Value="Collapsed" />
-                                <Setter TargetName="EditableText" Property="Visibility" Value="Visible" />
+                            <DataTrigger Binding="{Binding ProcessingType}" Value="Replace">
+                                <Setter TargetName="ReplacementBox" Property="Visibility" Value="Visible" />
                             </DataTrigger>
                         </DataTemplate.Triggers>
                     </DataTemplate>

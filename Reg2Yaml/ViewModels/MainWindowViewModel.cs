@@ -22,6 +22,7 @@ public class MainWindowViewModel : BindableBase
 
     private readonly AppVersionInfo appVersionInfo = new();
     private readonly TextProcessingService textProcessingService = new ();
+    private readonly TextProcessorStorageService textProcessorStorageService = new();
     private TextProcessorContainer selectedContainer;
     private TextProcessor selectedProcessor;
     private string inputText;
@@ -85,6 +86,22 @@ public class MainWindowViewModel : BindableBase
         }
 
         ResultText = textProcessingService.ExecuteAndExportToYaml(SelectedContainer, InputText);
+    });
+
+    public DelegateCommand SaveJsonCommand => new DelegateCommand(() =>
+    {
+        try
+        {
+            var path = Path.Combine(AppContext.BaseDirectory, "user_data", "textProcessorContainer.json");
+            textProcessorStorageService.Save(path, TextProcessorContainers);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+
+        Console.WriteLine("Json saved successfully.");
     });
 
     [Conditional("DEBUG")]
