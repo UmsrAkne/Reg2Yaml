@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -17,7 +17,7 @@ namespace Reg2Yaml.Core.Services
             Encoder = JavaScriptEncoder.Create(UnicodeRanges.All), // 日本語が文字化け（\uXXXX）するのを防ぐ
         };
 
-        public void Save(string filePath, IEnumerable containers)
+        public void Save(string filePath, IEnumerable<TextProcessorContainer> containers)
         {
             try
             {
@@ -38,24 +38,24 @@ namespace Reg2Yaml.Core.Services
         }
 
         /// <summary>
-        /// JSONファイルからデータを復元（読み込み）します。ファイルがない場合は空のコンテナを返します。
+        /// JSONファイルからデータを復元（読み込み）します。ファイルがない場合は空のリストを返します。
         /// </summary>
         /// <param name="filePath">読み込むファイルのパス</param>
-        /// <returns>復元されたデータのコンテナ</returns>
-        public TextProcessorContainer Load(string filePath)
+        /// <returns>復元されたデータのリスト</returns>
+        public List<TextProcessorContainer> Load(string filePath)
         {
             if (!File.Exists(filePath))
             {
-                // ファイルが存在しない場合は初期インスタンスを返す
-                return new TextProcessorContainer();
+                // ファイルが存在しない場合は空のリストを返す
+                return new List<TextProcessorContainer>();
             }
 
             try
             {
                 var jsonString = File.ReadAllText(filePath);
-                var container = JsonSerializer.Deserialize<TextProcessorContainer>(jsonString, options);
+                var containers = JsonSerializer.Deserialize<List<TextProcessorContainer>>(jsonString, options);
 
-                return container ?? new TextProcessorContainer();
+                return containers ?? new List<TextProcessorContainer>();
             }
             catch (Exception ex)
             {

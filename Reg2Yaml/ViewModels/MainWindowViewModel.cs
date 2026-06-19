@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using Prism.Commands;
 using Prism.Mvvm;
 using Reg2Yaml.Core.Services;
@@ -30,7 +31,22 @@ public class MainWindowViewModel : BindableBase
 
     public MainWindowViewModel()
     {
-        SetupDummyData();
+        var path = Path.Combine(AppContext.BaseDirectory, "user_data", "textProcessorContainer.json");
+        var loadedContainers = textProcessorStorageService.Load(path);
+
+        if (loadedContainers.Any())
+        {
+            foreach (var container in loadedContainers)
+            {
+                TextProcessorContainers.Add(container);
+            }
+
+            SelectedContainer = TextProcessorContainers.FirstOrDefault();
+        }
+        else
+        {
+            SetupDummyData();
+        }
     }
 
     public string Title => appVersionInfo.Title;
