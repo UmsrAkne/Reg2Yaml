@@ -40,19 +40,34 @@
 
             <ListBox
                 Width="300"
+                HorizontalContentAlignment="Stretch"
                 Background="LightGoldenrodYellow"
                 DockPanel.Dock="Top"
                 ItemsSource="{Binding TextProcessorContainers}"
                 SelectedItem="{Binding SelectedContainer}">
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type texts:TextProcessorContainer}">
-                        <StackPanel Orientation="Horizontal">
+                        <DockPanel>
                             <CheckBox
                                 Margin="0,0,5,0"
                                 VerticalAlignment="Center"
                                 IsChecked="{Binding IsEnabled}" />
-                            <TextBlock VerticalAlignment="Center" Text="{Binding DisplayName}" />
-                        </StackPanel>
+                            <TextBlock
+                                x:Name="NormalText"
+                                Text="{Binding DisplayName}"
+                                Visibility="Visible" />
+                            <TextBox
+                                x:Name="EditableText"
+                                Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}"
+                                Visibility="Collapsed" />
+                        </DockPanel>
+
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+                                <Setter TargetName="NormalText" Property="Visibility" Value="Collapsed" />
+                                <Setter TargetName="EditableText" Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -66,19 +81,35 @@
                 Content="Add Processor"
                 DockPanel.Dock="Bottom" />
             <ListBox
+                HorizontalContentAlignment="Stretch"
                 Background="LightGreen"
                 DockPanel.Dock="Top"
                 ItemsSource="{Binding SelectedContainer.TextProcessors}"
                 SelectedItem="{Binding SelectedProcessor}">
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type texts:TextProcessor}">
-                        <StackPanel Orientation="Horizontal">
+                        <DockPanel>
                             <CheckBox
                                 Margin="0,0,5,0"
                                 VerticalAlignment="Center"
                                 IsChecked="{Binding IsEnabled}" />
-                            <TextBlock VerticalAlignment="Center" Text="{Binding Caption}" />
-                        </StackPanel>
+                            <TextBlock
+                                x:Name="NormalText"
+                                VerticalAlignment="Center"
+                                Text="{Binding Caption, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox
+                                x:Name="EditableText"
+                                VerticalAlignment="Center"
+                                Text="{Binding Caption, UpdateSourceTrigger=PropertyChanged}"
+                                Visibility="Collapsed" />
+                        </DockPanel>
+
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+                                <Setter TargetName="NormalText" Property="Visibility" Value="Collapsed" />
+                                <Setter TargetName="EditableText" Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -93,12 +124,13 @@
                 DockPanel.Dock="Bottom" />
 
             <ItemsControl
+                HorizontalContentAlignment="Stretch"
                 Background="LightGray"
                 DockPanel.Dock="Top"
                 ItemsSource="{Binding SelectedProcessor.Units}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type texts:TextProcessingUnit}">
-                        <StackPanel Orientation="Horizontal">
+                        <DockPanel>
                             <CheckBox
                                 Margin="0,0,5,0"
                                 VerticalAlignment="Center"
@@ -107,8 +139,23 @@
                                 Margin="0,0,5,0"
                                 VerticalAlignment="Center"
                                 Text="{Binding ProcessingType}" />
-                            <TextBlock VerticalAlignment="Center" Text="{Binding RegexPattern}" />
-                        </StackPanel>
+                            <TextBox
+                                x:Name="NormalText"
+                                VerticalAlignment="Center"
+                                Text="{Binding RegexPattern, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock
+                                x:Name="EditableText"
+                                VerticalAlignment="Center"
+                                Text="{Binding RegexPattern, UpdateSourceTrigger=PropertyChanged}"
+                                Visibility="Collapsed" />
+                        </DockPanel>
+
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+                                <Setter TargetName="NormalText" Property="Visibility" Value="Collapsed" />
+                                <Setter TargetName="EditableText" Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
