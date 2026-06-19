@@ -212,6 +212,12 @@
                     Foreground="#555555"
                     Text="Result" />
             </Border>
+            <Button
+                Margin="3"
+                Padding="3"
+                Command="{Binding CopyResultCommand}"
+                Content="Copy result"
+                DockPanel.Dock="Bottom" />
             <TextBlock
                 Background="LightSteelBlue"
                 FontSize="{StaticResource CommonFontSize}"
