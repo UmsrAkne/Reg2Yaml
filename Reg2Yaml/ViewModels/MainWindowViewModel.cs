@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using Prism.Commands;
 using Prism.Mvvm;
 using Reg2Yaml.Core.Services;
@@ -118,6 +119,17 @@ public class MainWindowViewModel : BindableBase
         }
 
         Console.WriteLine("Json saved successfully.");
+    });
+
+    public DelegateCommand CopyResultCommand => new DelegateCommand(() =>
+    {
+        if (string.IsNullOrWhiteSpace(ResultText))
+        {
+            Console.WriteLine("ResultText is empty.");
+            return;
+        }
+
+        Clipboard.SetText(ResultText);
     });
 
     [Conditional("DEBUG")]
