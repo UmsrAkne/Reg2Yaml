@@ -93,7 +93,11 @@ namespace Reg2Yaml.Core.Services
                     return string.Join(Environment.NewLine, extractedValues);
 
                 case TextProcessingType.Replace:
-                    return Regex.Replace(inputText, unit.RegexPattern, unit.Replacement, options);
+                    var replacement = unit.Replacement ?? string.Empty;
+
+                    // 置き換え先に改行コードが含まれているかチェックして本物の改行にする。
+                    replacement = replacement.Replace("\\n", Environment.NewLine);
+                    return Regex.Replace(inputText, unit.RegexPattern, replacement, options);
 
                 default:
                     throw new ArgumentOutOfRangeException();
