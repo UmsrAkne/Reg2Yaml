@@ -8,6 +8,7 @@
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:texts="clr-namespace:Reg2Yaml.Core.Texts"
     xmlns:viewModels="clr-namespace:Reg2Yaml.ViewModels"
+    xmlns:views="clr-namespace:Reg2Yaml.Views"
     Title="{Binding Title}"
     Width="1280"
     Height="600"
@@ -31,209 +32,216 @@
             Command="{Binding SaveJsonCommand}"
             Modifiers="Control" />
     </Window.InputBindings>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <TabControl>
+        <TabItem Header="Profile editor">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
 
-        <DockPanel
-            Grid.Row="0"
-            Grid.RowSpan="2"
-            Grid.Column="0">
-            <Button
-                Margin="3"
-                Padding="3"
-                Command="{Binding AddContainerCommand}"
-                Content="Add Container"
-                DockPanel.Dock="Bottom" />
+                <DockPanel
+                    Grid.Row="0"
+                    Grid.RowSpan="2"
+                    Grid.Column="0">
+                    <Button
+                        Margin="3"
+                        Padding="3"
+                        Command="{Binding AddContainerCommand}"
+                        Content="Add Container"
+                        DockPanel.Dock="Bottom" />
 
-            <ListBox
-                Width="300"
-                HorizontalContentAlignment="Stretch"
-                Background="LightGoldenrodYellow"
-                DockPanel.Dock="Top"
-                ItemsSource="{Binding TextProcessorContainers}"
-                SelectedItem="{Binding SelectedContainer}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate DataType="{x:Type texts:TextProcessorContainer}">
-                        <DockPanel>
-                            <CheckBox
-                                Margin="0,0,5,0"
-                                VerticalAlignment="Center"
-                                IsChecked="{Binding IsEnabled}" />
-                            <TextBlock
-                                x:Name="NormalText"
-                                Text="{Binding DisplayName}"
-                                Visibility="Visible" />
-                            <TextBox
-                                x:Name="EditableText"
-                                Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}"
-                                Visibility="Collapsed" />
-                        </DockPanel>
+                    <ListBox
+                        Width="300"
+                        HorizontalContentAlignment="Stretch"
+                        Background="LightGoldenrodYellow"
+                        DockPanel.Dock="Top"
+                        ItemsSource="{Binding TextProcessorContainers}"
+                        SelectedItem="{Binding SelectedContainer}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type texts:TextProcessorContainer}">
+                                <DockPanel>
+                                    <CheckBox
+                                        Margin="0,0,5,0"
+                                        VerticalAlignment="Center"
+                                        IsChecked="{Binding IsEnabled}" />
+                                    <TextBlock
+                                        x:Name="NormalText"
+                                        Text="{Binding DisplayName}"
+                                        Visibility="Visible" />
+                                    <TextBox
+                                        x:Name="EditableText"
+                                        Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}"
+                                        Visibility="Collapsed" />
+                                </DockPanel>
 
-                        <DataTemplate.Triggers>
-                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
-                                <Setter TargetName="NormalText" Property="Visibility" Value="Collapsed" />
-                                <Setter TargetName="EditableText" Property="Visibility" Value="Visible" />
-                            </DataTrigger>
-                        </DataTemplate.Triggers>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </DockPanel>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+                                        <Setter TargetName="NormalText" Property="Visibility" Value="Collapsed" />
+                                        <Setter TargetName="EditableText" Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
 
-        <DockPanel Grid.Row="0" Grid.Column="1">
-            <Button
-                Margin="3"
-                Padding="3"
-                Command="{Binding AddProcessorCommand}"
-                Content="Add Processor"
-                DockPanel.Dock="Bottom" />
-            <ListBox
-                HorizontalContentAlignment="Stretch"
-                Background="LightGreen"
-                DockPanel.Dock="Top"
-                ItemsSource="{Binding SelectedContainer.TextProcessors}"
-                SelectedItem="{Binding SelectedProcessor}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate DataType="{x:Type texts:TextProcessor}">
-                        <DockPanel>
-                            <CheckBox
-                                Margin="0,0,5,0"
-                                VerticalAlignment="Center"
-                                IsChecked="{Binding IsEnabled}" />
-                            <TextBlock
-                                x:Name="NormalText"
-                                VerticalAlignment="Center"
-                                Text="{Binding Caption, UpdateSourceTrigger=PropertyChanged}" />
-                            <TextBox
-                                x:Name="EditableText"
-                                VerticalAlignment="Center"
-                                Text="{Binding Caption, UpdateSourceTrigger=PropertyChanged}"
-                                Visibility="Collapsed" />
-                        </DockPanel>
+                <DockPanel Grid.Row="0" Grid.Column="1">
+                    <Button
+                        Margin="3"
+                        Padding="3"
+                        Command="{Binding AddProcessorCommand}"
+                        Content="Add Processor"
+                        DockPanel.Dock="Bottom" />
+                    <ListBox
+                        HorizontalContentAlignment="Stretch"
+                        Background="LightGreen"
+                        DockPanel.Dock="Top"
+                        ItemsSource="{Binding SelectedContainer.TextProcessors}"
+                        SelectedItem="{Binding SelectedProcessor}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type texts:TextProcessor}">
+                                <DockPanel>
+                                    <CheckBox
+                                        Margin="0,0,5,0"
+                                        VerticalAlignment="Center"
+                                        IsChecked="{Binding IsEnabled}" />
+                                    <TextBlock
+                                        x:Name="NormalText"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding Caption, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBox
+                                        x:Name="EditableText"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding Caption, UpdateSourceTrigger=PropertyChanged}"
+                                        Visibility="Collapsed" />
+                                </DockPanel>
 
-                        <DataTemplate.Triggers>
-                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
-                                <Setter TargetName="NormalText" Property="Visibility" Value="Collapsed" />
-                                <Setter TargetName="EditableText" Property="Visibility" Value="Visible" />
-                            </DataTrigger>
-                        </DataTemplate.Triggers>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </DockPanel>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+                                        <Setter TargetName="NormalText" Property="Visibility" Value="Collapsed" />
+                                        <Setter TargetName="EditableText" Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
 
-        <DockPanel Grid.Row="0" Grid.Column="2">
-            <Button
-                Margin="3"
-                Padding="3"
-                Command="{Binding AddUnitCommand}"
-                Content="Add Unit"
-                DockPanel.Dock="Bottom" />
+                <DockPanel Grid.Row="0" Grid.Column="2">
+                    <Button
+                        Margin="3"
+                        Padding="3"
+                        Command="{Binding AddUnitCommand}"
+                        Content="Add Unit"
+                        DockPanel.Dock="Bottom" />
 
-            <ItemsControl
-                HorizontalContentAlignment="Stretch"
-                Background="LightGray"
-                DockPanel.Dock="Top"
-                ItemsSource="{Binding SelectedProcessor.Units}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="{x:Type texts:TextProcessingUnit}">
-                        <DockPanel>
-                            <CheckBox
-                                Margin="0,0,5,0"
-                                VerticalAlignment="Center"
-                                IsChecked="{Binding IsEnabled}" />
-                            <ComboBox
-                                Width="80"
-                                Margin="0,0,5,0"
-                                VerticalAlignment="Center"
-                                ItemsSource="{Binding Source={StaticResource ProcessingTypeEnumValues}}"
-                                SelectedItem="{Binding ProcessingType}" />
-                            <TextBox
-                                x:Name="RegexPatternBox"
-                                Width="200"
-                                Margin="0,0,5,0"
-                                VerticalAlignment="Center"
-                                Text="{Binding RegexPattern, UpdateSourceTrigger=PropertyChanged}" />
-                            <TextBox
-                                x:Name="ReplacementBox"
-                                Width="200"
-                                VerticalAlignment="Center"
-                                Text="{Binding Replacement, UpdateSourceTrigger=PropertyChanged}"
-                                Visibility="Collapsed" />
-                        </DockPanel>
+                    <ItemsControl
+                        HorizontalContentAlignment="Stretch"
+                        Background="LightGray"
+                        DockPanel.Dock="Top"
+                        ItemsSource="{Binding SelectedProcessor.Units}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type texts:TextProcessingUnit}">
+                                <DockPanel>
+                                    <CheckBox
+                                        Margin="0,0,5,0"
+                                        VerticalAlignment="Center"
+                                        IsChecked="{Binding IsEnabled}" />
+                                    <ComboBox
+                                        Width="80"
+                                        Margin="0,0,5,0"
+                                        VerticalAlignment="Center"
+                                        ItemsSource="{Binding Source={StaticResource ProcessingTypeEnumValues}}"
+                                        SelectedItem="{Binding ProcessingType}" />
+                                    <TextBox
+                                        x:Name="RegexPatternBox"
+                                        Width="200"
+                                        Margin="0,0,5,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding RegexPattern, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBox
+                                        x:Name="ReplacementBox"
+                                        Width="200"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding Replacement, UpdateSourceTrigger=PropertyChanged}"
+                                        Visibility="Collapsed" />
+                                </DockPanel>
 
-                        <DataTemplate.Triggers>
-                            <DataTrigger Binding="{Binding ProcessingType}" Value="Replace">
-                                <Setter TargetName="ReplacementBox" Property="Visibility" Value="Visible" />
-                            </DataTrigger>
-                        </DataTemplate.Triggers>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </DockPanel>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding ProcessingType}" Value="Replace">
+                                        <Setter TargetName="ReplacementBox" Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </DockPanel>
 
-        <DockPanel Grid.Row="1" Grid.Column="1">
-            <Border
-                Padding="3,10,3,5"
-                Background="LightCyan"
-                DockPanel.Dock="Top">
-                <TextBlock
-                    DockPanel.Dock="Top"
-                    FontWeight="SemiBold"
-                    Foreground="#555555"
-                    Text="Input Text" />
-            </Border>
-            <TextBox
-                AcceptsReturn="True"
-                AcceptsTab="True"
-                Background="LightCyan"
-                FontSize="{StaticResource CommonFontSize}"
-                Text="{Binding InputText}" />
-        </DockPanel>
+                <DockPanel Grid.Row="1" Grid.Column="1">
+                    <Border
+                        Padding="3,10,3,5"
+                        Background="LightCyan"
+                        DockPanel.Dock="Top">
+                        <TextBlock
+                            DockPanel.Dock="Top"
+                            FontWeight="SemiBold"
+                            Foreground="#555555"
+                            Text="Input Text" />
+                    </Border>
+                    <TextBox
+                        AcceptsReturn="True"
+                        AcceptsTab="True"
+                        Background="LightCyan"
+                        FontSize="{StaticResource CommonFontSize}"
+                        Text="{Binding InputText}" />
+                </DockPanel>
 
-        <DockPanel Grid.Row="1" Grid.Column="2">
-            <Border
-                Padding="3,10,3,5"
-                Background="LightSteelBlue"
-                DockPanel.Dock="Top">
-                <TextBlock
-                    DockPanel.Dock="Top"
-                    FontWeight="SemiBold"
-                    Foreground="#555555"
-                    Text="Result" />
-            </Border>
-            <Button
-                Margin="3"
-                Padding="3"
-                Command="{Binding CopyResultCommand}"
-                Content="Copy result"
-                DockPanel.Dock="Bottom" />
-            <TextBlock
-                Background="LightSteelBlue"
-                FontSize="{StaticResource CommonFontSize}"
-                Text="{Binding ResultText}" />
-        </DockPanel>
+                <DockPanel Grid.Row="1" Grid.Column="2">
+                    <Border
+                        Padding="3,10,3,5"
+                        Background="LightSteelBlue"
+                        DockPanel.Dock="Top">
+                        <TextBlock
+                            DockPanel.Dock="Top"
+                            FontWeight="SemiBold"
+                            Foreground="#555555"
+                            Text="Result" />
+                    </Border>
+                    <Button
+                        Margin="3"
+                        Padding="3"
+                        Command="{Binding CopyResultCommand}"
+                        Content="Copy result"
+                        DockPanel.Dock="Bottom" />
+                    <TextBlock
+                        Background="LightSteelBlue"
+                        FontSize="{StaticResource CommonFontSize}"
+                        Text="{Binding ResultText}" />
+                </DockPanel>
 
-        <Border
-            Grid.Row="2"
-            Grid.Column="0"
-            Grid.ColumnSpan="3">
+                <Border
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3">
 
-            <Button
-                Margin="3"
-                Padding="3"
-                Command="{Binding ExecuteTextProcessCommand}"
-                Content="Start Text Process" />
-        </Border>
-    </Grid>
+                    <Button
+                        Margin="3"
+                        Padding="3"
+                        Command="{Binding ExecuteTextProcessCommand}"
+                        Content="Start Text Process" />
+                </Border>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Batch process">
+            <views:BatchProcessPage DataContext="{Binding BatchProcessPageViewModel}" />
+        </TabItem>
+    </TabControl>
 </Window>
