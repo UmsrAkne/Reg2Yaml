@@ -34,6 +34,7 @@ public class MainWindowViewModel : BindableBase
     {
         var path = Path.Combine(AppContext.BaseDirectory, "user_data", "textProcessorContainer.json");
         var loadedContainers = textProcessorStorageService.Load(path);
+        BatchProcessPageViewModel = new BatchProcessPageViewModel(TextProcessorContainers);
 
         if (loadedContainers.Any())
         {
@@ -79,6 +80,8 @@ public class MainWindowViewModel : BindableBase
         get => selectedProcessor;
         set => SetProperty(ref selectedProcessor, value);
     }
+
+    public BatchProcessPageViewModel BatchProcessPageViewModel { get; set; }
 
     public DelegateCommand AddContainerCommand => new DelegateCommand(() =>
     {
