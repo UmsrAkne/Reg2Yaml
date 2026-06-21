@@ -69,6 +69,7 @@
             Grid.Row="1"
             Grid.Column="1"
             Margin="3"
+            Command="{Binding RunBatchProcessCommand}"
             Content="Convert all" />
     </Grid>
 </UserControl>
