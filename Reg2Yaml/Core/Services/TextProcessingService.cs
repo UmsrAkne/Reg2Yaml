@@ -48,6 +48,8 @@ namespace Reg2Yaml.Core.Services
                     currentText = ExecuteUnit(unit, currentText);
                 }
 
+                currentText = currentText?.Trim();
+
                 // 4. 最終結果を Caption をキーにして保持（重複防止のため上書きか退避を考慮）
                 if (!string.IsNullOrEmpty(processor.Caption))
                 {
@@ -75,7 +77,7 @@ namespace Reg2Yaml.Core.Services
 
             // 複数行マッチ（^ $ が各行の先頭・末尾にマッチ）を設定
             // 必要に応じて . が改行にもマッチする RegexOptions.SingleLine も考慮してください
-            var options = RegexOptions.Multiline | RegexOptions.Compiled;
+            var options = RegexOptions.Singleline | RegexOptions.Compiled;
 
             switch (unit.ProcessingType)
             {
@@ -93,7 +95,11 @@ namespace Reg2Yaml.Core.Services
                     return string.Join(Environment.NewLine, extractedValues);
 
                 case TextProcessingType.Replace:
-                    return Regex.Replace(inputText, unit.RegexPattern, unit.Replacement, options);
+                    var replacement = unit.Replacement ?? string.Empty;
+
+                    // 置き換え先に改行コードが含まれているかチェックして本物の改行にする。
+                    replacement = replacement.Replace("\\n", Environment.NewLine);
+                    return Regex.Replace(inputText, unit.RegexPattern, replacement, options);
 
                 default:
                     throw new ArgumentOutOfRangeException();
