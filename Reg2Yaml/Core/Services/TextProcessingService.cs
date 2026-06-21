@@ -75,7 +75,7 @@ namespace Reg2Yaml.Core.Services
 
             // 複数行マッチ（^ $ が各行の先頭・末尾にマッチ）を設定
             // 必要に応じて . が改行にもマッチする RegexOptions.SingleLine も考慮してください
-            var options = RegexOptions.Multiline | RegexOptions.Compiled;
+            var options = RegexOptions.Singleline | RegexOptions.Compiled;
 
             switch (unit.ProcessingType)
             {
