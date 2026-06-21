@@ -48,6 +48,8 @@ namespace Reg2Yaml.Core.Services
                     currentText = ExecuteUnit(unit, currentText);
                 }
 
+                currentText = currentText?.Trim();
+
                 // 4. 最終結果を Caption をキーにして保持（重複防止のため上書きか退避を考慮）
                 if (!string.IsNullOrEmpty(processor.Caption))
                 {
