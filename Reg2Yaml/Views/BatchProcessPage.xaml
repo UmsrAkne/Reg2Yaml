@@ -2,6 +2,8 @@
     x:Class="Reg2Yaml.Views.BatchProcessPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:behaviors="clr-namespace:Reg2Yaml.Behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Reg2Yaml.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -40,6 +42,10 @@
             Grid.Column="1"
             Background="LightGray"
             ItemsSource="{Binding Files}">
+            <b:Interaction.Behaviors>
+                <behaviors:DropFileBehavior />
+            </b:Interaction.Behaviors>
+
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding FileInfo.Name}" />
