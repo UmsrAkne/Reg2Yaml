@@ -35,7 +35,9 @@ public class MainWindowViewModel : BindableBase
     {
         var path = Path.Combine(AppContext.BaseDirectory, "user_data", "textProcessorContainer.json");
         var loadedContainers = textProcessorStorageService.Load(path);
-        BatchProcessPageViewModel = new BatchProcessPageViewModel(TextProcessorContainers);
+        BatchProcessPageViewModel = new BatchProcessPageViewModel(
+            TextProcessorContainers,
+            msg => Message = msg);
 
         if (loadedContainers.Any())
         {
@@ -103,12 +105,20 @@ public class MainWindowViewModel : BindableBase
 
     public DelegateCommand ExecuteTextProcessCommand => new DelegateCommand(() =>
     {
-        if (SelectedContainer == null)
+        if (SelectedContainer == null || string.IsNullOrWhiteSpace(InputText))
         {
             return;
         }
 
-        ResultText = textProcessingService.ExecuteAndExportToYaml(SelectedContainer, InputText);
+        try
+        {
+            ResultText = textProcessingService.ExecuteAndExportToYaml(SelectedContainer, InputText);
+            Message = string.Empty;
+        }
+        catch (TextProcessingException e)
+        {
+            Message = e.Message;
+        }
     });
 
     public DelegateCommand SaveJsonCommand => new DelegateCommand(() =>

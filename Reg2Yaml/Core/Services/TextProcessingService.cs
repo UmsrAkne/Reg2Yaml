@@ -78,31 +78,43 @@ namespace Reg2Yaml.Core.Services
             // 複数行マッチ（^ $ が各行の先頭・末尾にマッチ）を設定
             // 必要に応じて . が改行にもマッチする RegexOptions.SingleLine も考慮してください
             var options = RegexOptions.Singleline | RegexOptions.Compiled;
+            var timeout = TimeSpan.FromSeconds(1);
 
-            switch (unit.ProcessingType)
+            try
             {
-                case TextProcessingType.Extract:
-                    // マッチしたすべての箇所を抽出
-                    var matches = Regex.Matches(inputText, unit.RegexPattern, options);
+                switch (unit.ProcessingType)
+                {
+                    case TextProcessingType.Extract:
+                        // マッチしたすべての箇所を抽出
+                        var matches = Regex.Matches(inputText, unit.RegexPattern, options, timeout);
 
-                    if (matches.Count == 0)
-                    {
-                        return string.Empty;
-                    }
+                        if (matches.Count == 0)
+                        {
+                            return string.Empty;
+                        }
 
-                    // すべてのマッチした文字列（またはキャプチャグループ全体）を改行で連結
-                    var extractedValues = matches.Select(m => m.Value);
-                    return string.Join(Environment.NewLine, extractedValues);
+                        // すべてのマッチした文字列（またはキャプチャグループ全体）を改行で連結
+                        var extractedValues = matches.Select(m => m.Value);
+                        return string.Join(Environment.NewLine, extractedValues);
 
-                case TextProcessingType.Replace:
-                    var replacement = unit.Replacement ?? string.Empty;
+                    case TextProcessingType.Replace:
+                        var replacement = unit.Replacement ?? string.Empty;
 
-                    // 置き換え先に改行コードが含まれているかチェックして本物の改行にする。
-                    replacement = replacement.Replace("\\n", Environment.NewLine);
-                    return Regex.Replace(inputText, unit.RegexPattern, replacement, options);
+                        // 置き換え先に改行コードが含まれているかチェックして本物の改行にする。
+                        replacement = replacement.Replace("\\n", Environment.NewLine);
+                        return Regex.Replace(inputText, unit.RegexPattern, replacement, options, timeout);
 
-                default:
-                    throw new ArgumentOutOfRangeException();
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                throw new TextProcessingException($"正規表現の構文が不正です: '{unit.RegexPattern}'", ex);
+            }
+            catch (TextProcessingException ex)
+            {
+                throw new TextProcessingException($"正規表現の処理がタイムアウトしました: '{unit.RegexPattern}'", ex);
             }
         }
     }
