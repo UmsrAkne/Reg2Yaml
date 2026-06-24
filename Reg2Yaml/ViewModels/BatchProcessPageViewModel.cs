@@ -12,10 +12,14 @@ namespace Reg2Yaml.ViewModels
     public class BatchProcessPageViewModel : BindableBase
     {
         private readonly TextProcessingService textProcessingService = new();
+        private readonly Action<string> onErrorAction;
 
-        public BatchProcessPageViewModel(ObservableCollection<TextProcessorContainer> textProcessorContainers)
+        public BatchProcessPageViewModel(
+            ObservableCollection<TextProcessorContainer> textProcessorContainers,
+            Action<string> onErrorAction)
         {
             TextProcessorContainers = textProcessorContainers;
+            this.onErrorAction = onErrorAction;
         }
 
         public ObservableCollection<TextProcessorContainer> TextProcessorContainers { get; set; }
@@ -53,18 +57,28 @@ namespace Reg2Yaml.ViewModels
                         continue;
                     }
 
-                    var yamlResult = textProcessingService.ExecuteAndExportToYaml(container, baseText);
-                    if (string.IsNullOrEmpty(yamlResult))
+                    try
                     {
-                        continue;
+                        var yamlResult = textProcessingService.ExecuteAndExportToYaml(container, baseText);
+
+                        if (string.IsNullOrEmpty(yamlResult))
+                        {
+                            continue;
+                        }
+
+                        var fileName = $"{Path.GetFileNameWithoutExtension(fileItem.FileInfo.Name)}_{container.DisplayName}.yaml";
+                        var filePath = Path.Combine(resultDirPath, fileName);
+
+                        File.WriteAllText(filePath, yamlResult);
+
+                        ProcessedFiles.Add(new FileListItem(filePath));
                     }
-
-                    var fileName = $"{Path.GetFileNameWithoutExtension(fileItem.FileInfo.Name)}_{container.DisplayName}.yaml";
-                    var filePath = Path.Combine(resultDirPath, fileName);
-
-                    File.WriteAllText(filePath, yamlResult);
-
-                    ProcessedFiles.Add(new FileListItem(filePath));
+                    catch (Exception e)
+                    {
+                        onErrorAction?.Invoke($"Error occurred while processing file: {container.DisplayName} - {fileItem.FileInfo.Name}");
+                        Console.WriteLine(e);
+                        throw;
+                    }
                 }
             }
         });

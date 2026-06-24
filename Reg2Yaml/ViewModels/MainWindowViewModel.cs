@@ -29,12 +29,15 @@ public class MainWindowViewModel : BindableBase
     private TextProcessor selectedProcessor;
     private string inputText;
     private string resultText;
+    private string message = string.Empty;
 
     public MainWindowViewModel()
     {
         var path = Path.Combine(AppContext.BaseDirectory, "user_data", "textProcessorContainer.json");
         var loadedContainers = textProcessorStorageService.Load(path);
-        BatchProcessPageViewModel = new BatchProcessPageViewModel(TextProcessorContainers);
+        BatchProcessPageViewModel = new BatchProcessPageViewModel(
+            TextProcessorContainers,
+            msg => Message = msg);
 
         if (loadedContainers.Any())
         {
@@ -69,6 +72,8 @@ public class MainWindowViewModel : BindableBase
 
     public string ResultText { get => resultText; set => SetProperty(ref resultText, value); }
 
+    public string Message { get => message; set => SetProperty(ref message, value); }
+
     public TextProcessorContainer SelectedContainer
     {
         get => selectedContainer;
@@ -100,12 +105,20 @@ public class MainWindowViewModel : BindableBase
 
     public DelegateCommand ExecuteTextProcessCommand => new DelegateCommand(() =>
     {
-        if (SelectedContainer == null)
+        if (SelectedContainer == null || string.IsNullOrWhiteSpace(InputText))
         {
             return;
         }
 
-        ResultText = textProcessingService.ExecuteAndExportToYaml(SelectedContainer, InputText);
+        try
+        {
+            ResultText = textProcessingService.ExecuteAndExportToYaml(SelectedContainer, InputText);
+            Message = string.Empty;
+        }
+        catch (TextProcessingException e)
+        {
+            Message = e.Message;
+        }
     });
 
     public DelegateCommand SaveJsonCommand => new DelegateCommand(() =>
@@ -121,7 +134,9 @@ public class MainWindowViewModel : BindableBase
             throw;
         }
 
-        Console.WriteLine("Json saved successfully.");
+        const string msg = "Json saved successfully.";
+        Console.WriteLine(msg);
+        Message = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + $" {msg}";
     });
 
     public DelegateCommand CopyResultCommand => new DelegateCommand(() =>

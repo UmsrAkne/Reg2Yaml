@@ -227,7 +227,7 @@
                         Text="{Binding ResultText}" />
                 </DockPanel>
 
-                <Border
+                <StackPanel
                     Grid.Row="2"
                     Grid.Column="0"
                     Grid.ColumnSpan="3">
@@ -237,7 +237,14 @@
                         Padding="3"
                         Command="{Binding ExecuteTextProcessCommand}"
                         Content="Start Text Process" />
-                </Border>
+                    <StatusBar>
+                        <StatusBarItem>
+                            <StatusBarItem.Content>
+                                <TextBlock FontSize="{StaticResource CommonFontSize}" Text="{Binding Message}" />
+                            </StatusBarItem.Content>
+                        </StatusBarItem>
+                    </StatusBar>
+                </StackPanel>
             </Grid>
         </TabItem>
         <TabItem Header="Batch process">
